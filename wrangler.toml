@@ -1,9 +1,26 @@
 name = "worker-rust"
-main = "build/worker/shim.mjs"
-compatibility_date = "2023-12-01"
+type = "javascript"
+workers_dev = true
+compatibility_date = "2022-01-20"
+
+[vars]
+WORKERS_RS_VERSION = "0.0.9"
 
 [build]
-command = "cargo install -q worker-build && worker-build --release"
+command = "cargo install -q worker-build && worker-build --release" # required
+
+[build.upload]
+dir = "build/worker"
+format = "modules"
+main = "./shim.mjs"
+
+[[build.upload.rules]]
+globs = ["**/*.wasm"]
+type = "CompiledWasm"
+
+kv_namespaces = [
+  { binding = "KV", preview_id = "2ef0965a65fe411fb3abc0432dd849fd", id = "aa5edaf1761e4129b1b985f3ebd154f0" }
+]
 
 [env.dev]
 build = { command = "cargo install -q worker-build && worker-build --dev" }

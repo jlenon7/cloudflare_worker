@@ -54,8 +54,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         "{} {}, located at: {:?}, within: {}",
         req.method().to_string(),
         req.path(),
-        req.cf().coordinates().unwrap_or_default(),
-        req.cf().region().unwrap_or("unknown region".into())
+        req.cf().expect("req missing cf").coordinates().unwrap_or_default(),
+        req.cf().expect("req missing cf").region().unwrap_or("unknown region".into())
     );
 
     if !matches!(req.method(), Method::Post) {
